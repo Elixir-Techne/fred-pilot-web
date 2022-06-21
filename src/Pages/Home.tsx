@@ -1,14 +1,9 @@
-import {
-  Autocomplete,
-  Box,
-  Button,
-  CircularProgress,
-  TextField,
-} from "@mui/material";
+import { Autocomplete, Box, Button, CircularProgress, TextField } from "@mui/material";
 import { useState } from "react";
-import ReactMapGl from "react-map-gl";
+import ReactMapGl, { Map } from "react-map-gl";
 import { getGeocoder } from "../api";
 import { useNavigate } from "react-router";
+import GeocoderControl from "./GeoCoderControl";
 
 const accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -22,11 +17,12 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [options, setOptions] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [searchedValue, setSearchedValue] = useState({});
 
   const handleGeocoder = (e) => {
     setLoading(true);
     const params = {
-      types: "address",
+      types: "place",
       limit: 10,
       access_token: accessToken,
     };
@@ -35,8 +31,7 @@ const Home = () => {
         setOptions(
           res?.data?.features.map((feature) => ({
             label: feature.place_name,
-            key: feature.id,
-            geometry: feature.geometry,
+            ...feature,
           }))
         );
         setLoading(false);
@@ -46,8 +41,12 @@ const Home = () => {
 
   const handleClick = () => {
     const option = options.find((opt) => opt.label === inputValue);
-    const coordinates = option?.geometry?.coordinates;
-    navigate("searched-info");
+    console.log({ option });
+    setSearchedValue(option);
+    // const [latitude, longitude] = option?.geometry?.coordinates;
+    // setviewPort((prev) => {
+    //   return { ...prev, latitude, longitude };
+    // });
   };
 
   return (
@@ -58,9 +57,15 @@ const Home = () => {
         onViewPortChange={(viewport) => setviewPort(viewport)}
         mapStyle="mapbox://styles/mapbox/streets-v9"
         dragPan={false}
-        scrollZoom={false}
-      ></ReactMapGl>
-      <Box
+        // scrollZoom={false}
+      >
+        <GeocoderControl
+          searchedValue={searchedValue}
+          mapboxAccessToken={accessToken}
+          position="top-left"
+        />
+      </ReactMapGl>
+      {/* <Box
         display="flex"
         position="absolute"
         width="100%"
@@ -105,7 +110,7 @@ const Home = () => {
         >
           Search
         </Button>
-      </Box>
+      </Box> */}
     </>
   );
 };

@@ -42,30 +42,39 @@ button {
 }
 
 #bg {
-  position: fixed; 
+  position: fixed;
   min-width: 100%;
   min-height: 100%;
 }
 
-html, body, #root{
-  height: 100% !important
+html,
+body,
+#root {
+  height: 100% !important;
 }
 
-.mapboxgl-ctrl-bottom-right{
+.mapboxgl-ctrl-bottom-right {
   display: none !important;
 }
 
-.MuiTab-root{
-  color:#da652e !important
+.MuiTab-root {
+  color: #da652e !important;
 }
 
-.MuiCard-root{
+.MuiCard-root {
   border-radius: 12px !important;
   box-shadow: none !important;
-  padding: 16px ;
-  margin: 16px ;
+  padding: 16px;
+  margin: 16px;
 }
 
-.MuiTypography-h5{
-  color:#8d3733 !important
+.MuiTypography-h5 {
+  color: #8d3733 !important;
+}
+
+.mapboxgl-ctrl-top-left {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10%;
 }

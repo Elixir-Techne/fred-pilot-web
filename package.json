@@ -10,6 +10,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
+    "@mapbox/mapbox-gl-geocoder": "^5.0.1",
     "@mui/material": "^5.8.4",
     "axios": "^0.27.2",
     "mapbox-gl": "^2.9.0",
