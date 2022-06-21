@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Autocomplete, Box, Button, CircularProgress, TextField } from "@mui/material";
 import { useState } from "react";
 import ReactMapGl, { Map } from "react-map-gl";
@@ -19,25 +20,25 @@ const Home = () => {
   const [inputValue, setInputValue] = useState("");
   const [searchedValue, setSearchedValue] = useState({});
 
-  const handleGeocoder = (e) => {
-    setLoading(true);
-    const params = {
-      types: "address",
-      limit: 10,
-      access_token: accessToken,
-    };
-    getGeocoder(e.target.value, params)
-      .then((res) => {
-        setOptions(
-          res?.data?.features.map((feature) => ({
-            label: feature.place_name,
-            ...feature,
-          }))
-        );
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  };
+  // const handleGeocoder = (e) => {
+  //   setLoading(true);
+  //   const params = {
+  //     types: "address",
+  //     limit: 10,
+  //     access_token: accessToken,
+  //   };
+  //   getGeocoder(e.target.value, params)
+  //     .then((res) => {
+  //       setOptions(
+  //         res?.data?.features.map((feature) => ({
+  //           label: feature.place_name,
+  //           ...feature,
+  //         }))
+  //       );
+  //       setLoading(false);
+  //     })
+  //     .catch(() => setLoading(false));
+  // };
 
   const handleClick = () => {
     const option = options.find((opt) => opt.label === inputValue);
