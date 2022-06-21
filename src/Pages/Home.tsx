@@ -22,7 +22,7 @@ const Home = () => {
   const handleGeocoder = (e) => {
     setLoading(true);
     const params = {
-      types: "place",
+      types: "address",
       limit: 10,
       access_token: accessToken,
     };

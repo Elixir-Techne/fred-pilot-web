@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import { useControl, Marker, MarkerProps, ControlPosition } from "react-map-gl";
 import MapboxGeocoder, { GeocoderOptions } from "@mapbox/mapbox-gl-geocoder";
+import { getBoundingBox } from "../api";
 
 type GeocoderControlProps = Omit<GeocoderOptions, "accessToken" | "mapboxgl" | "marker"> & {
   mapboxAccessToken: string;
@@ -26,18 +27,25 @@ export default function GeocoderControl(props: GeocoderControlProps) {
         marker: true,
         accessToken: props.mapboxAccessToken,
       });
+      console.log({ ctrl });
       ctrl.on("loading", props.onLoading);
       ctrl.on("results", props.onResults);
       ctrl.on("result", (evt) => {
         props.onResult(evt);
-        console.log({ evt });
-
         const { result } = evt;
+
         const location =
           result &&
           (result.center || (result.geometry?.type === "Point" && result.geometry.coordinates));
         if (location && props.marker) {
-          setMarker(<Marker {...props.marker} longitude={location[0]} latitude={location[1]} />);
+          getBoundingBox({
+            latitude: location[0],
+            longitude: location[1],
+            building_id: "",
+          }).then((res) => {
+            console.log({ res });
+            setMarker(<Marker {...props.marker} longitude={location[0]} latitude={location[1]} />);
+          });
         } else {
           setMarker(null);
         }

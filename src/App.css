@@ -78,3 +78,12 @@ body,
   justify-content: center;
   margin-top: 10%;
 }
+
+.mapboxgl-ctrl-geocoder--button:hover,
+.mapboxgl-ctrl-geocoder--button {
+  background-color: transparent;
+}
+
+.mapboxgl-ctrl-geocoder--button > svg {
+  margin-bottom: 6px;
+}
