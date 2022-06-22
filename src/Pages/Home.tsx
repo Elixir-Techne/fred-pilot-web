@@ -1,18 +1,17 @@
 // @ts-nocheck
 import { Autocomplete, Box, Button, CircularProgress, TextField } from "@mui/material";
-import { useState } from "react";
-import ReactMapGl, { Map } from "react-map-gl";
-import { getGeocoder } from "../api";
+import { useRef, useState } from "react";
+import ReactMapGl, { MapRef } from "react-map-gl";
+import { getGeocoder, getBoundingBox } from "../api";
 import { useNavigate } from "react-router";
-import GeocoderControl from "./GeoCoderControl";
 
 const accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 const Home = () => {
   const navigate = useNavigate();
-  const [viewPort, setviewPort] = useState({
-    latitude: 59.9139,
-    longitude: 10.7522,
+  const [viewport, setViewport] = useState({
+    latitude: 70.782223,
+    longitude: 22.308927,
     zoom: 10,
   });
   const [loading, setLoading] = useState(false);
@@ -20,31 +19,45 @@ const Home = () => {
   const [inputValue, setInputValue] = useState("");
   const [searchedValue, setSearchedValue] = useState({});
 
-  // const handleGeocoder = (e) => {
-  //   setLoading(true);
-  //   const params = {
-  //     types: "address",
-  //     limit: 10,
-  //     access_token: accessToken,
-  //   };
-  //   getGeocoder(e.target.value, params)
-  //     .then((res) => {
-  //       setOptions(
-  //         res?.data?.features.map((feature) => ({
-  //           label: feature.place_name,
-  //           ...feature,
-  //         }))
-  //       );
-  //       setLoading(false);
-  //     })
-  //     .catch(() => setLoading(false));
-  // };
+  const mapRef = useRef<MapRef>();
+
+  const handleGeocoder = (e) => {
+    setLoading(true);
+    const params = {
+      types: "address",
+      limit: 10,
+      access_token: accessToken,
+    };
+    getGeocoder(inputValue, params)
+      .then((res) => {
+        setOptions(
+          res?.data?.features.map((feature) => ({
+            label: feature.place_name,
+            ...feature,
+          }))
+        );
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  };
 
   const handleClick = () => {
     const option = options.find((opt) => opt.label === inputValue);
-    console.log({ option });
     setSearchedValue(option);
-    // const [latitude, longitude] = option?.geometry?.coordinates;
+    const [longitude, latitude] = option?.center;
+    mapRef.current?.flyTo({ center: [longitude, latitude], duration: 2000 });
+    getBoundingBox({
+      latitude,
+      longitude,
+      building_id: "",
+    }).then((res) => {
+      const { data } = res;
+      if (Array.isArray(data) && data.length > 0) {
+        const [placeData] = data;
+        navigate({ pathname: "/searched-info", search: `polygone=${placeData?.Shape_Area || ""}` });
+      }
+    });
+
     // setviewPort((prev) => {
     //   return { ...prev, latitude, longitude };
     // });
@@ -53,20 +66,15 @@ const Home = () => {
   return (
     <>
       <ReactMapGl
-        initialViewState={viewPort}
+        ref={mapRef}
+        initialViewState={viewport}
         mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
-        onViewPortChange={(viewport) => setviewPort(viewport)}
+        // onViewPortChange={(viewport) => setViewport(viewport)}
         mapStyle="mapbox://styles/mapbox/streets-v9"
-        dragPan={false}
+        // dragPan={false}
         // scrollZoom={false}
-      >
-        <GeocoderControl
-          searchedValue={searchedValue}
-          mapboxAccessToken={accessToken}
-          position="top-left"
-        />
-      </ReactMapGl>
-      {/* <Box
+      ></ReactMapGl>
+      <Box
         display="flex"
         position="absolute"
         width="100%"
@@ -111,7 +119,7 @@ const Home = () => {
         >
           Search
         </Button>
-      </Box> */}
+      </Box>
     </>
   );
 };
