@@ -9,6 +9,7 @@ const Footer = () => {
         width="100%"
         display="flex"
         justifyContent="center"
+        mt="auto"
         py={4}
       >
         Grundergarasjen @ Oslomet, Pilestredet 52, 0167 Oslo

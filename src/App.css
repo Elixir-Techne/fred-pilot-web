@@ -15,7 +15,6 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,7 +49,7 @@ button {
 html,
 body,
 #root {
-  height: 100% !important;
+  height: 100%;
 }
 
 .mapboxgl-ctrl-bottom-right {
@@ -101,4 +100,8 @@ body,
   text-align: center;
   color: #fff;
   background: #ee8a65;
+}
+
+button:hover {
+  background-color: #ee8a65 !important;
 }

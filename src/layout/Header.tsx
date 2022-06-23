@@ -28,13 +28,7 @@ const Header = () => {
   };
 
   return (
-    <Box
-      display="flex"
-      justifyContent="space-between"
-      m={2.5}
-      mx={6}
-      alignItems="center"
-    >
+    <Box display="flex" justifyContent="space-between" p={2.5} mx={6} alignItems="center">
       <Box color="#da652e" component="h3">
         Mitigrate
       </Box>
