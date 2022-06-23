@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Box, Card, Grid, Typography } from "@mui/material";
 import React, { useCallback, useRef, useState } from "react";
 import ReactMapGl from "react-map-gl";
@@ -41,7 +42,7 @@ const DataInfo = () => {
             [minLng, minLat],
             [maxLng, maxLat],
           ],
-          { padding: 40, duration: 1000 }
+          { padding: 40, duration: 1000, zoom: 17 }
         );
       }
     }
@@ -57,7 +58,7 @@ const DataInfo = () => {
               initialViewState={{
                 latitude: 37.78,
                 longitude: -122.4,
-                zoom: 11,
+                zoom: 17,
               }}
               mapStyle={mapSyles as MapboxStyle}
               interactiveLayerIds={["sf-neighborhoods-fill"]}
